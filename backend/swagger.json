@@ -1,0 +1,574 @@
+
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Mosn Onboarding API",
+        "version": "1.0.0",
+        "title": "Mosn Onboarding API",
+        "contact": {
+            "email": "findxconcepts@gmail.com"
+        }
+       
+    },
+    "host": "localhost:4000",
+    "basePath": "",
+    "schemes": ["http"],
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Enter JWT token in the format 'Bearer <token>'"
+        }
+    },
+    "paths" : {
+        "/user/register" : {
+            "post" : {
+                "summary" : "Register a New User",
+                "description": "Create a New User's Login",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user authentication data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                                "$ref": "#/definitions/user"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/user/activateaccount" : {
+            "put" : {
+                "security": [
+                  {
+                    "BearerAuth": []
+                  }  
+                ],
+                "summary" : "Activate a Registered User",
+                "description": "Activate a Newly Registered Account",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user activation data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                                "$ref": "#/definitions/user"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/user/activatebyemail/{activationemailkey}" : {        
+            "put" : {
+                 "security": [
+                  {
+                    "BearerAuth": []
+                  }  
+                ],
+                "summary" : "activation account using activation key",
+                "description": "Activate New User By Email",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "activationemailkey",
+                        "in": "path",
+                        "description": "unique email activation key",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/user"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+
+        "/user/login" : {
+            "post" : {
+                "summary" : "Login with Username or Email",
+                "description": "user login",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "user login",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/authenticate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                                "$ref": "#/definitions/authenticate"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/user/profile" : {        
+            "get" : {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "summary" : "Get Information of a Single User",
+                "description": "Get User with UserID",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/user"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/companies" : {
+            "post" : {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "summary" : "Add a New Company",
+                "description": "save a company into the database",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "company registration data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/company"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Company created successfully",
+                        "schema": {
+                                "$ref": "#/definitions/company"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            },
+        "get" : {
+                "security": [
+                  {
+                    "BearerAuth": []
+                  }  
+                ],
+                "summary" : "Get all companies",
+                "description": "Get all companies",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/company"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+
+        "/properties" : {
+            "get" : {
+                "summary" : "Get all registrations",
+                "description": "Get all registered students",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/company_properties"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            },
+            "post" : {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "summary" : "Add Property to a company",
+                "description": "register a new property",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Create A New Property Under a Company",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/company_properties"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                                "$ref": "#/definitions/company_properties"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/registrations/student" : {
+            "post" : {
+                "summary" : "Get Student's Registration Based on Matric Number and Session",
+                "description": "Get a New Registration",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "registration retrieved data",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registrations"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "successful operation",
+                        "schema": {
+                                "$ref": "#/definitions/registrations"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid status value",
+                        "schema": {
+                            "$ref": "#/definitions/InvalidResponse"
+                        }
+                    }
+                }
+            }
+        }    
+    }, 
+    "definitions": {
+        "user": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "example": "mosn"
+               },
+               "email": {
+                   "type": "string",
+                   "example": "mosn@gmail.com"
+               },
+               "password": {
+                   "type": "string",
+                   "example": "mosnpassword"
+               },
+               "firstname": {
+                   "type": "string",
+                   "example": "James"
+               },
+               "lastname": {
+                   "type": "string",
+                   "example": "Anderseen"
+               },
+               "middlename": {
+                   "type": "string",
+                   "example": "Elliot"
+               },
+               "phone_ext": {
+                   "type": "number",
+                   "example": "234"
+               },
+               "phone_number": {
+                   "type": "number",
+                   "example": "8045746687"
+               },
+               "role": {
+                   "type": "string",
+                   "example": "Admin"
+               }
+                }
+        },
+        "authenticate": {
+            "type": "object",
+            "properties": {
+                "identifier": {
+                    "oneOf": [
+                        {
+                            "type": "string",
+                            "format": "email",
+                            "description": "email address of the user"
+                        },
+                        {
+                            "type": "string",
+                            "description": "Username of the user"
+                        }
+                    ]
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "description": "Password of the user"
+                }
+            },
+            "required": ["identifier", "password"],
+            "example": {
+                "identifier": "johndoe@dough.com",
+                "password": "password123"
+            }
+},
+        "company": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Henroitt Hotel"
+               },
+               "email": {
+                   "type": "string",
+                   "example": "admin@henriott.com"
+               },
+               "taxid": {
+                   "type": "string",
+                   "example": "TN-122323232323"
+               },
+               "headquarters": {
+                   "type": "string",
+                   "example": "5, Malibu Street, Along Lagos Island, Nigeria"
+               },
+               "phone_ext": {
+                "type": "integer",
+                "example": "234"
+                },
+                "phone_number": {
+                "type": "integer",
+                "example": "8086934583"
+                },
+                "website": {
+                "type": "string",
+                "example": "www.henroitt.com"
+                },
+                "timezone": {
+                        "type": "string",
+                        "example": "Africa/Lagos"
+                },
+                "postalcode": {
+                        "type": "string",
+                        "example": "07107"
+                }
+            }
+        },
+        "company_properties": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Hotel De Henroitt"
+               },
+               "city": {
+                   "type": "string",
+                   "example": "Newark"
+               },
+               "state": {
+                   "type": "string",
+                   "example": "New Jersey"
+               },
+               "country": {
+                "type": "string",
+                "example": "Rain"
+                },
+
+                "property_type": {
+                "type": "string",
+                "example": "Hotel"
+                },
+
+                "longitude": {
+                "type": "string",
+                "example": "1.7213877778787"
+                },
+
+                "latitude": {
+                "type": "string",
+                "example": "1.7213877778787"
+                },
+
+                "email": {
+                "type": "string",
+                "example": "1.7213877778787"
+                },
+
+                "number_of_rooms": {
+                "type": "number",
+                "example": "50"
+                },
+
+                "company_id": {
+                "type": "string",
+                "example": "9126752535773"
+                }
+
+                }
+
+        },
+       "registrations": {
+            "type": "object",
+            "properties": {
+               "registrant": {
+                   "type": "string",
+                   "example": "6f9e30b47084d971a7"
+               },
+            "session": {
+                   "type": "string",
+                   "example": "2012/2013"
+               }
+
+               
+                }
+        },
+        "InvalidResponse": {
+            "type": "object",
+            "properties": {
+                "errors":{
+                   "type": "array",
+                   "items":{
+                        "$ref": "#/definitions/error"
+                   }
+                } 
+            }
+
+        },
+        "error":{
+            "type":"object",
+            "properties": {
+                "message": {
+                    "type":"string",
+                    "example":"Error message"
+                },
+                "field": {
+                    "type":"string",
+                    "example":"error field if any"
+                }
+            }  
+        }
+
+        }
+       
+    }

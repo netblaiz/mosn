@@ -1,0 +1,10 @@
+{
+	"db": {
+
+		"user": "postgres",
+		"password": "KingWood",
+		"host": "localhost",
+		"port": 5432,
+		"database": "mosn_database",
+	},
+}

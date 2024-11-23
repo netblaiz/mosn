@@ -1,0 +1,9 @@
+{
+	"dev": {
+		"driver": "pg",
+		"host": "127.0.0.1",
+		"user": "postgres",
+		"password": "KingWood",
+		"database": "mosn_database"
+	}
+}
